@@ -63,6 +63,6 @@ let main argv =
     try
         days[day].Invoke(null, [| File.ReadAllLines(input) |> List.ofArray |]) |> ignore
     with :? TargetInvocationException as e ->
-        raise e.InnerException
+        reraise ()
 
     0
