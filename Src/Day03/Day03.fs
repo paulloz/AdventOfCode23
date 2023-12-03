@@ -53,3 +53,21 @@ let main (lines: string list) =
     let floodedTotal = sumAllNumbers(flooded)
 
     printfn "Sum of all parts: %d" (total - floodedTotal)
+
+    // This is the most stupid, most ineficient way of doing step 2. But let's re-use the flood fill.
+    let boardString = board |> Seq.collect id |> String.Concat
+    let step2Seeds = board |> extractSeeds (fun c -> c = '*')
+    let gearRatios = seq {
+        for seed in step2Seeds do
+            let mask = (flood board [seed]) |> Seq.collect id |> String.Concat
+            let matches =
+                seq { for i in 0..(mask.Length - 1) do if mask[i] = ' ' then boardString[i] else '.' }
+                |> String.Concat |> r.Matches
+            if matches.Count = 2 then
+                matches |> Seq.map (fun m -> m.Value |> int) |> Seq.reduce (*)
+            else
+                0
+        }
+    printfn "Sum of all gear ratios: %d" (gearRatios |> Seq.sum)
+
+
