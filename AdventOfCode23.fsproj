@@ -6,6 +6,7 @@
   <ItemGroup>
     <Compile Include="Src\Day01\Day01.fs" />
     <Compile Include="Src\Day02\Day02.fs" />
+    <Compile Include="Src\Day03\Day03.fs" />
     <Compile Include="Src\Program.fs" />
   </ItemGroup>
   <ItemGroup>
