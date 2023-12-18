@@ -1,39 +1,39 @@
 module AdventOfCode23.Day14
 
-let printMap (map: char list list) =
-    for line in map do
-        for c in line do
-            printf "%c" c
-        printfn ""
-
-let tilt (cells: char list) =
-    let rec loop (result: char list) (cells: char list) =
-        match cells with
-        | [] -> result
-        | 'O' :: tail -> loop (result @ [ 'O' ]) tail
-        | '#' :: tail -> loop (result @ [ '#' ]) tail
-        | '.' :: tail ->
-            match (tail |> List.tryFindIndex ((=) 'O')), (tail |> List.tryFindIndex ((=) '#')) with
-            | None, _ -> result @ [ '.' ] @ tail
-            | Some i, Some j when j < i -> loop ( result @ [ '.' ] @ tail[..j]  ) tail[j + 1..]
-            | Some i, _ -> loop (result @ [ 'O' ]) ([ for _ in [0..i] do yield '.' ] @ tail[i + 1..])
-        | c :: _ -> failwith (c |> string)
-    loop [] cells
-
-let tiltN (map: char list list) = map |> List.transpose |> List.map tilt |> List.transpose
-let tiltW (map: char list list) = map |> List.map tilt
-let tiltS (map: char list list) = map |> List.transpose |> List.map List.rev |> List.map tilt |> List.map List.rev |> List.transpose
-let tiltE (map: char list list) = map |> List.map List.rev |> List.map tilt |> List.map List.rev
-
-let spinCycle (map: char list list) = map |> tiltN |> tiltW |> tiltS |> tiltE
-
-let computeNorthBeamLoad (map: char list list) =
-    map |> List.transpose |> List.map (fun col ->
-        let length = List.length col
-        col |> List.mapi (fun i c -> if c = 'O' then Some (length - i) else None) |> List.choose id
-    ) |> List.collect id |> List.sum
-
 let main (lines: string list) =
+    let printMap (map: char list list) =
+        for line in map do
+            for c in line do
+                printf "%c" c
+            printfn ""
+
+    let tilt (cells: char list) =
+        let rec loop (result: char list) (cells: char list) =
+            match cells with
+            | [] -> result
+            | 'O' :: tail -> loop (result @ [ 'O' ]) tail
+            | '#' :: tail -> loop (result @ [ '#' ]) tail
+            | '.' :: tail ->
+                match (tail |> List.tryFindIndex ((=) 'O')), (tail |> List.tryFindIndex ((=) '#')) with
+                | None, _ -> result @ [ '.' ] @ tail
+                | Some i, Some j when j < i -> loop ( result @ [ '.' ] @ tail[..j]  ) tail[j + 1..]
+                | Some i, _ -> loop (result @ [ 'O' ]) ([ for _ in [0..i] do yield '.' ] @ tail[i + 1..])
+            | c :: _ -> failwith (c |> string)
+        loop [] cells
+
+    let tiltN (map: char list list) = map |> List.transpose |> List.map tilt |> List.transpose
+    let tiltW (map: char list list) = map |> List.map tilt
+    let tiltS (map: char list list) = map |> List.transpose |> List.map List.rev |> List.map tilt |> List.map List.rev |> List.transpose
+    let tiltE (map: char list list) = map |> List.map List.rev |> List.map tilt |> List.map List.rev
+
+    let spinCycle (map: char list list) = map |> tiltN |> tiltW |> tiltS |> tiltE
+
+    let computeNorthBeamLoad (map: char list list) =
+        map |> List.transpose |> List.map (fun col ->
+            let length = List.length col
+            col |> List.mapi (fun i c -> if c = 'O' then Some (length - i) else None) |> List.choose id
+        ) |> List.collect id |> List.sum
+
     let map = lines |> List.map List.ofSeq
 
     printfn "Load on the north beam after one tilt: %d" (map |> tiltN |> computeNorthBeamLoad)

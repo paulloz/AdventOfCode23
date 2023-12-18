@@ -2,20 +2,20 @@ module AdventOfCode23.Day08
 
 open System.Text.RegularExpressions
 
-let parseMap (lines: string list) =
-    let r = new Regex(@"(?<key>\w+) = \((?<left>\w+), (?<right>\w+)\)", RegexOptions.Compiled)
-    let makeTuple (left: string) (right: string) = [ ('L', left) ; ('R', right) ] |> Map.ofList
-    lines
-    |> List.map r.Match
-    |> List.choose (fun (m: Match) ->
-        if m.Success then
-            Some((m.Groups.["key"].Value, makeTuple m.Groups.["left"].Value m.Groups.["right"].Value))
-        else
-            None
-    )
-    |> Map.ofList
-
 let main (lines: string list) =
+    let parseMap (lines: string list) =
+        let r = new Regex(@"(?<key>\w+) = \((?<left>\w+), (?<right>\w+)\)", RegexOptions.Compiled)
+        let makeTuple (left: string) (right: string) = [ ('L', left) ; ('R', right) ] |> Map.ofList
+        lines
+        |> List.map r.Match
+        |> List.choose (fun (m: Match) ->
+            if m.Success then
+                Some((m.Groups.["key"].Value, makeTuple m.Groups.["left"].Value m.Groups.["right"].Value))
+            else
+                None
+        )
+        |> Map.ofList
+
     let instructions = lines[0] |> List.ofSeq
     let map = lines.[2..] |> parseMap
 

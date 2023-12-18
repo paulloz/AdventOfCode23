@@ -15,9 +15,6 @@ type Hand =
         Rank: HandType;
     }
 
-let reduceWinnings (hands: (Hand * int) list) =
-    hands |> List.mapi (fun (i: int) (_, bid: int) -> (i + 1) * bid) |> List.sum
-
 type HandManager() =
     abstract ValueFromCard : char -> int
     abstract HandTypeFromCards : char array -> HandType
@@ -101,6 +98,9 @@ type JokerHandManager() =
         | _ -> HandType.HighCard
 
 let main (lines: string list) =
+    let reduceWinnings (hands: (Hand * int) list) =
+        hands |> List.mapi (fun (i: int) (_, bid: int) -> (i + 1) * bid) |> List.sum
+
     let step1 = new HandManager()
     printfn "Total winnings: %d" (lines |> step1.CreateAndRankHands |> reduceWinnings)
 

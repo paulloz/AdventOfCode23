@@ -2,12 +2,12 @@ module AdventOfCode23.Day05
 
 open System.Text.RegularExpressions
 
-let lineToInts (line: string) =
-    line.Split ' ' |> Seq.choose (fun str -> if str.Length > 0 then Some(str |> uint) else None) |> List.ofSeq
-
-let isInRange (start: uint) (length: uint) (n: uint) = n >= start && n < start + length
-
 let main (lines: string list) =
+    let lineToInts (line: string) =
+        line.Split ' ' |> Seq.choose (fun str -> if str.Length > 0 then Some(str |> uint) else None) |> List.ofSeq
+
+    let isInRange (start: uint) (length: uint) (n: uint) = n >= start && n < start + length
+
     let r = new Regex("(\w+)-to-(\w+) map:")
 
     let lines = (lines |> Array.ofList |> String.concat "\n").Split "\n\n"
