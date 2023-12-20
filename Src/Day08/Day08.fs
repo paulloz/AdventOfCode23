@@ -1,5 +1,6 @@
 module AdventOfCode23.Day08
 
+open AdventOfCode23.Common
 open System.Text.RegularExpressions
 
 let main (lines: string list) =
@@ -30,16 +31,9 @@ let main (lines: string list) =
         [ 0; (loop 0 [start]).Length - 1 ] |> List.max
 
     let distanceToAll () =
-        let rec gcd (a: uint64) (b: uint64) = if b = 0UL then a else gcd b (a % b)
-        let rec lcm (l: uint64 list) =
-            let lcm' (a: uint64) (b: uint64) = (a * b) / (gcd a b)
-            match l with
-            | [] -> 1UL
-            | [ a; b ] -> lcm' a b
-            | head :: tail -> lcm' head (lcm tail)
         let startingCells = map.Keys |> Seq.filter (fun (key: string) -> key.EndsWith('A'))
         let distances = startingCells |> Seq.map (distanceTo (fun (key: string) -> key.EndsWith('Z')))
-        lcm (distances |> Seq.map (fun (x: int) -> x |> uint64) |> List.ofSeq)
+        Math.lcm (distances |> Seq.map (fun (x: int) -> x |> uint64) |> List.ofSeq)
 
     printfn "Number of steps required to reach ZZZ: %d" (distanceTo (fun (key: string) -> key = "ZZZ") "AAA")
     printfn "Number of steps required to reach **Z: %d" (distanceToAll ())

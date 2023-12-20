@@ -6,6 +6,7 @@
   <ItemGroup>
     <Compile Include="Src\Common\Color.fs" />
     <Compile Include="Src\Common\Vector.fs" />
+    <Compile Include="Src\Common\Math.fs" />
     <Compile Include="Src\Common\FloodFill.fs" />
     <Compile Include="Src\Day*\*.fs" />
     <Compile Include="Src\Program.fs" />
